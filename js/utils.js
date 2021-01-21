@@ -1,17 +1,30 @@
+function buildBoard(){
+    var board = [];
+    //debugger;
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        board.push([]);
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            var cell = {
+                minesAroundCount: 0,
+                isShown: false,
+                isMine: false,
+                isMarked: false
+            }
+            board[i][j] = cell;
+        }
+    }
+    return board;
+}
+
 function renderBoard(board, selector) {
     var strHTML = '<table border="0"><tbody>';
     var cell = '';
     for (var i = 0; i < board.length; i++) {
       strHTML += '<tr>';
       for (var j = 0; j < board[0].length; j++) {
-//        if (board[i][j].isMine){
-//            cell = '*';
-//       }else{
-//            cell = board[i][j].minesAroundCount;
-//        }
-        strHTML += `<td class="cell cell${i}-${j}" 
-        onclick="cellClicked(this,${i},${j})" 
-        oncontextmenu="cellMarked(this,${i},${j})">${cell}</td>`
+        strHTML += `<td class="cell gray cell${i}-${j}" 
+        onclick="cellClicked(${i},${j})" 
+        oncontextmenu="cellMarked(${i},${j})">${cell}</td>`
       }
       strHTML += '</tr>'
     }
@@ -21,8 +34,15 @@ function renderBoard(board, selector) {
   }
 
 function renderCell(i,j,value) {
-    // Select the elCell and set the value
     var elCell = document.querySelector(`.cell${i}-${j}`);
+    if (value >= 0 && value !== ''){
+        elCell.classList.remove('gray');
+        elCell.classList.add('shown');
+        if (!value) value='';
+    }else{
+        elCell.classList.remove('shown');
+        elCell.classList.add('gray');
+    }
     elCell.innerHTML = value;
 }
 
@@ -30,35 +50,11 @@ function getEmptyCells(board,idxRow,idxCol) {
     var emptyCells = []
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[0].length; j++) {
-                if (i===idxRow && j===idxCol){
-                    continue;
-                }else{
-                    emptyCells.push({ i: i, j: j })
-                }
-        }
+            if (i===idxRow && j===idxCol) continue;
+            else emptyCells.push({ i: i, j: j });
+       }
     }
-    console.log(emptyCells);
     return emptyCells;
-}
-  
-  
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-  
-  
-function getCountMinesAround(board, rowIdx, colIdx) {
-    var count = 0;
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i > board.length - 1) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (j < 0 || j > board[0].length - 1) continue
-            if (i === rowIdx && j === colIdx) continue
-            var currCell = board[i][j]
-            if (currCell.isMine) count++
-        }
-    }
-    return count;
 }
 
 function printBoard(board){
@@ -78,8 +74,26 @@ function printBoard(board){
     console.log(strBoard);
 }
 
-/*function getCellCoord(strCellId) {
-    var parts = strCellId.split('-')
-    var coord = { i: +parts[1], j: +parts[2] };
-    return coord;
-}*/
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function startTimer(){
+    var startDate = Date.now();
+    gElapsedTimeIntervalRef = setInterval(function(){
+        mathTime(startDate);}, 1000);
+}
+
+function stopTimer(){
+    clearInterval(gElapsedTimeIntervalRef);
+}
+
+function mathTime(startDate){
+    var elTime = document.querySelector('.timer');
+    elTime.innerText = (Math.floor((Date.now() - startDate)/1000));
+}
+
+function clearTimer(){
+    var elTime = document.querySelector('.timer');
+    elTime.innerText = '0';
+}

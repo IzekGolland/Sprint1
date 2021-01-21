@@ -10,17 +10,31 @@
 </head>
 
 <body onload="initGame()">
-    <h2>Score: <span class="score">0</span></h2>
-    <h2>Timer: <span class="timer">0</span></h2>
-    <button class="restart" onclick="restart()">Restart</button>
-    
+    <input type="radio" onclick="difChange(this)" name="dif" value="4-2"> Easy
+    <input type="radio" onclick="difChange(this)" name="dif" value="8-12" checked="checked"> Medium
+    <input type="radio" onclick="difChange(this)" name="dif" value="12-30"> Hard </br>
+    <h4>Lives Left: <span class="lives">0</span></h2>
+    <h4>Flags Left: <span class="flags">0</span></h2>
+    <h4>Timer: <span class="timer">0</span></h2>
+    <div class="picturs">
+    </div>
+    <button class="safe" onclick="safeClick()">Safe Click</button> </br>    
+    <button class="restart" onclick="restart()"></button>
     <table class="center" border="1" cellpadding="10">
         <tbody class="board-container"></tbody>
-    </table>
-    
+    </table>     
+    <p>High Score:</p>
+    <p>Name: <span class="name"> </span> Time: <span class="score"> </span></p>
+    <button onclick="clearSorage()">clear score</button>
+
     <script src="js/utils.js"></script>
+    <script src="js/safe.js"></script>
     <script src="js/game.js"></script>
     <script src="js/mines.js"></script>
+    <script src="js/storge.js"></script>
+    <script src="js/hints.js"></script>
+    
+
 </body>
 
 </html>
